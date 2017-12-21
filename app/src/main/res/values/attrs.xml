@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WaterfallToolbar">
+        <attr name="initial_elevation" format="dimension" />
+        <attr name="final_elevation" format="dimension" />
+        <attr name="scroll_final_elevation" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="TwoWaySeekBar">
+        <attr name="minValue" format="float" />
+        <attr name="maxValue" format="float" />
+        <attr name="initialValue" format="float" />
+        <attr name="handleColor" format="color" />
+        <attr name="initialHandleColor" format="color" />
+        <attr name="lineColor" format="color" />
+        <attr name="lineWidth" format="dimension" />
+        <attr name="handleRadius" format="dimension" />
+    </declare-styleable>
+</resources>
