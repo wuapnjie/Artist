@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.xiaopo.flying.artist.MainActivity">
 
-    <com.xiaopo.flying.artist.waterfall.WaterfallToolbar
+    <com.xiaopo.flying.artist.waterfall.WaterfallLayout
         android:id="@+id/waterfall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             app:title="@string/app_name"
             app:titleTextColor="@color/colorAccent" />
 
-    </com.xiaopo.flying.artist.waterfall.WaterfallToolbar>
+    </com.xiaopo.flying.artist.waterfall.WaterfallLayout>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

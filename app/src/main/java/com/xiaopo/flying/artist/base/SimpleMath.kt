@@ -11,3 +11,5 @@ fun clamp(min: Float, value: Float, max: Float): Float {
 }
 
 fun Int.modifyAlpha(@IntRange(from = 0, to = 255) alpha: Int) = (this and 0x00ffffff) or (alpha shl 24)
+
+fun Float.toRadian() = Math.toRadians(this.toDouble()).toFloat()

@@ -53,10 +53,10 @@ class ElasticDragLayout @JvmOverloads constructor(context: Context,
 
   }
 
-  override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray?, type: Int) {
+  override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
     if (draggingDown && dy > 0 || draggingUp && dy < 0) {
       dragScale(dy)
-      consumed?.set(1, dy)
+      consumed.set(1, dy)
     }
   }
 

@@ -8,15 +8,13 @@ import android.widget.ScrollView
 import com.xiaopo.flying.artist.R
 import com.xiaopo.flying.artist.base.clamp
 import com.xiaopo.flying.artist.base.dp
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * @author wupanjie
  */
-class WaterfallToolbar @JvmOverloads constructor(context: Context,
-                                                 attr: AttributeSet? = null,
-                                                 defStyle: Int = 0)
+class WaterfallLayout @JvmOverloads constructor(context: Context,
+                                                attr: AttributeSet? = null,
+                                                defStyle: Int = 0)
   : CardView(context, attr, defStyle) {
 
   var initialElevation: Int = 0.dp
@@ -45,10 +43,10 @@ class WaterfallToolbar @JvmOverloads constructor(context: Context,
   init {
     radius = 0f
     attr?.let {
-      val typedArray = context.obtainStyledAttributes(attr, R.styleable.WaterfallToolbar)
-      initialElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallToolbar_initial_elevation, 0.dp)
-      finalElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallToolbar_final_elevation, 6.dp)
-      scrollFinalElevation = typedArray.getInteger(R.styleable.WaterfallToolbar_final_elevation, 300.dp)
+      val typedArray = context.obtainStyledAttributes(attr, R.styleable.WaterfallLayout)
+      initialElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallLayout_initial_elevation, 0.dp)
+      finalElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallLayout_final_elevation, 6.dp)
+      scrollFinalElevation = typedArray.getInteger(R.styleable.WaterfallLayout_final_elevation, 300.dp)
       typedArray.recycle()
     }
   }

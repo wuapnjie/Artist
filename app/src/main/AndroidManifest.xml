@@ -25,7 +25,9 @@
         <activity
             android:name=".elasticdrag.ElasticActivity"
             android:theme="@style/AppTheme.Translucent" />
-        <activity android:name=".twowayseek.TwoWayActivity"></activity>
+        <activity android:name=".twowayseek.TwoWayActivity" />
+        <activity android:name=".emojiexplode.EmojiExplodeActivity" />
+        <activity android:name=".interactionimage.InteractionImageActivity"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="WaterfallToolbar">
+    <declare-styleable name="WaterfallLayout">
         <attr name="initial_elevation" format="dimension" />
         <attr name="final_elevation" format="dimension" />
         <attr name="scroll_final_elevation" format="integer" />
