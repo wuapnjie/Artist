@@ -7,6 +7,7 @@ import com.xiaopo.flying.artist.base.intentTo
 import com.xiaopo.flying.artist.elasticdrag.ElasticActivity
 import com.xiaopo.flying.artist.emojiexplode.EmojiExplodeActivity
 import com.xiaopo.flying.artist.interactionimage.InteractionImageActivity
+import com.xiaopo.flying.artist.liveprogress.LiveProgressActivity
 import com.xiaopo.flying.artist.twowayseek.TwoWayActivity
 import com.xiaopo.flying.artist.waterfall.WaterfallActivity
 import com.xiaopo.flying.recyclerkit.AnotherAdapter
@@ -26,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         Work("Elastic Drag Layout", ElasticActivity::class.java),
         Work("Two Way Seek Bar", TwoWayActivity::class.java),
         Work("Emoji Explode View", EmojiExplodeActivity::class.java),
-        Work("Interaction Image View", InteractionImageActivity::class.java)
+        Work("Interaction Image View", InteractionImageActivity::class.java),
+        Work("Live Progress", LiveProgressActivity::class.java)
     )
 
     val adapter = AnotherAdapter()

@@ -27,7 +27,8 @@
             android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".twowayseek.TwoWayActivity" />
         <activity android:name=".emojiexplode.EmojiExplodeActivity" />
-        <activity android:name=".interactionimage.InteractionImageActivity"></activity>
+        <activity android:name=".interactionimage.InteractionImageActivity"/>
+        <activity android:name=".liveprogress.LiveProgressActivity"/>
     </application>
 
 </manifest>
