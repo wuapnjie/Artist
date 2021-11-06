@@ -3,6 +3,7 @@ package com.xiaopo.flying.artist.manyanimator
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -25,6 +26,10 @@ class ManyAnimatorActivity : AppCompatActivity() {
 
         ivColor = iv_color
         ivAnim = iv_anim
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            display?.refreshRate?.toInt()?.let { ValueFrameAnimator.frameCountPerSecond = it }
+        }
 
         ivAnim.setOnClickListener {
             startAnim()

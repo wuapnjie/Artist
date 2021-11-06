@@ -4,7 +4,6 @@ import android.animation.TimeInterpolator
 import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.os.Build
-import android.util.Log
 import java.util.ArrayList
 
 /**
@@ -23,6 +22,8 @@ class ValueFrameAnimator private constructor(
 ) : ValueAnimator() {
 
     companion object {
+
+        var frameCountPerSecond = 60
 
         fun ofFloat(vararg values: Float): ValueFrameAnimator {
             return ValueFrameAnimator(values)
@@ -107,7 +108,6 @@ class ValueFrameAnimator private constructor(
         }
 
         fractionFrameAnimator?.start()
-        Log.e("DDD", name, Exception())
     }
 
     override fun pause() {
@@ -208,8 +208,11 @@ class ValueFrameAnimator private constructor(
     }
 
     private fun initAnimator() {
+        val totalFrames = ((duration.toFloat() / 1000) * frameCountPerSecond).toInt()
+
         fractionFrameAnimator = FractionFrameAnimator(
             name,
+            totalFrames,
             duration,
             repeat,
             reverse,
@@ -234,6 +237,7 @@ class ValueFrameAnimator private constructor(
 
     private class FractionFrameAnimator(
         name: String,
+        totalFrames: Int,
         duration: Long,
         repeat: Boolean = false,
         reverse: Boolean = false,
@@ -243,7 +247,7 @@ class ValueFrameAnimator private constructor(
         private val onAnimateEndListener: OnAnimateEndListener,
         private val onAnimateRepeatListener: OnAnimateRepeatListener,
         private val onAnimateCancelListener: OnAnimateCancelListener
-    ) : FrameAnimator(name, 60, duration, startDelay, repeat) {
+    ) : FrameAnimator(name, totalFrames, duration, startDelay, repeat) {
 
         var animateFraction: Float = 0f
 
