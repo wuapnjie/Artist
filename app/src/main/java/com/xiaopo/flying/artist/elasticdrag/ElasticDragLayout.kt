@@ -1,8 +1,8 @@
 package com.xiaopo.flying.artist.elasticdrag
 
 import android.content.Context
-import android.support.v4.view.NestedScrollingParent2
-import android.support.v4.view.ViewCompat
+import androidx.core.view.NestedScrollingParent2
+import androidx.core.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout

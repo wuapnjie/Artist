@@ -1,13 +1,14 @@
 package com.xiaopo.flying.artist
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.xiaopo.flying.artist.base.Work
 import com.xiaopo.flying.artist.base.intentTo
 import com.xiaopo.flying.artist.elasticdrag.ElasticActivity
 import com.xiaopo.flying.artist.emojiexplode.EmojiExplodeActivity
 import com.xiaopo.flying.artist.interactionimage.InteractionImageActivity
 import com.xiaopo.flying.artist.liveprogress.LiveProgressActivity
+import com.xiaopo.flying.artist.manyanimator.ManyAnimatorActivity
 import com.xiaopo.flying.artist.twowayseek.TwoWayActivity
 import com.xiaopo.flying.artist.waterfall.WaterfallActivity
 import com.xiaopo.flying.recyclerkit.AnotherAdapter
@@ -28,7 +29,8 @@ class MainActivity : AppCompatActivity() {
         Work("Two Way Seek Bar", TwoWayActivity::class.java),
         Work("Emoji Explode View", EmojiExplodeActivity::class.java),
         Work("Interaction Image View", InteractionImageActivity::class.java),
-        Work("Live Progress", LiveProgressActivity::class.java)
+        Work("Live Progress", LiveProgressActivity::class.java),
+        Work("Many Animator", ManyAnimatorActivity::class.java)
     )
 
     val adapter = AnotherAdapter()

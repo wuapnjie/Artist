@@ -2,7 +2,7 @@ package com.xiaopo.flying.artist.emojiexplode
 
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.xiaopo.flying.artist.R
 import kotlinx.android.synthetic.main.activity_emoji_explode.*

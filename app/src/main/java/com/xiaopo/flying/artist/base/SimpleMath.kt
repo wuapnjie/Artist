@@ -1,6 +1,6 @@
 package com.xiaopo.flying.artist.base
 
-import android.support.annotation.IntRange
+import androidx.annotation.IntRange
 
 /**
  * @author wupanjie

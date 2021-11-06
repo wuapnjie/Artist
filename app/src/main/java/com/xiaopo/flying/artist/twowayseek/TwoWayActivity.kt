@@ -1,6 +1,6 @@
 package com.xiaopo.flying.artist.twowayseek
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.xiaopo.flying.artist.R
 import com.xiaopo.flying.artist.base.logd

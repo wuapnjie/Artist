@@ -5,7 +5,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Handler
-import android.support.v4.view.ViewConfigurationCompat
+import androidx.core.view.ViewConfigurationCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ViewConfiguration

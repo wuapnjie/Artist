@@ -1,8 +1,8 @@
 package com.xiaopo.flying.artist.waterfall
 
 import android.content.Context
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.widget.ScrollView
 import com.xiaopo.flying.artist.R
@@ -54,7 +54,7 @@ class WaterfallLayout @JvmOverloads constructor(context: Context,
   fun bind(recyclerView: RecyclerView) {
     this.recyclerView = recyclerView
     recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-      override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+      override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
         scrolledPosition += dy

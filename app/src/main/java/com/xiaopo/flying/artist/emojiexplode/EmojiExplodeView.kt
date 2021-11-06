@@ -3,7 +3,7 @@ package com.xiaopo.flying.artist.emojiexplode
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.support.v4.util.Pools
+import androidx.core.util.Pools
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator

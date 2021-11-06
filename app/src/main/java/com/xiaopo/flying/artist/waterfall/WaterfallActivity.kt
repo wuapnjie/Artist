@@ -1,7 +1,7 @@
 package com.xiaopo.flying.artist.waterfall
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.xiaopo.flying.artist.R
 import com.xiaopo.flying.artist.base.strings
 import com.xiaopo.flying.recyclerkit.AnotherAdapter
