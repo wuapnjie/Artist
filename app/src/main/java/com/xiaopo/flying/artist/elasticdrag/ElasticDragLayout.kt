@@ -6,8 +6,8 @@ import androidx.core.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import com.xiaopo.flying.artist.base.dp
-import com.xiaopo.flying.artist.base.logd
+import com.xiaopo.flying.artist.base.dpInt
+import com.xiaopo.flying.artist.base.log
 import kotlin.math.abs
 
 /**
@@ -25,7 +25,7 @@ class ElasticDragLayout @JvmOverloads constructor(context: Context,
                                                   defStyle: Int = 0)
   : FrameLayout(context, attr, defStyle), NestedScrollingParent2 {
 
-  private var dragDismissDistance = 112.dp
+  private var dragDismissDistance = 112.dpInt
   private var dragDismissFraction = -1f
   private var dragDismissScale = 0.95f
   private var shouldScale = true
@@ -65,7 +65,7 @@ class ElasticDragLayout @JvmOverloads constructor(context: Context,
   }
 
   override fun onStopNestedScroll(target: View, type: Int) {
-    logd("total drag : ${totalDrag}")
+    "total drag : ${totalDrag}".log()
     if (abs(totalDrag) >= dragDismissDistance) {
       dismissListeners.forEach { it.invoke() }
     } else {

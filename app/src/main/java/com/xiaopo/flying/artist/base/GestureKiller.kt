@@ -2,10 +2,8 @@ package com.xiaopo.flying.artist.base
 
 import android.content.Context
 import android.graphics.PointF
-import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Handler
-import androidx.core.view.ViewConfigurationCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ViewConfiguration
@@ -99,7 +97,7 @@ class GestureKiller(val context: Context) {
 
         if (!detectBounds.contains(downX, downY)) {
           onNotTouchedListener?.invoke(downX, downY)
-          logd("Not touched,touched ($downX,$downY),the bounds is $detectBounds")
+          "Not touched,touched ($downX,$downY),the bounds is $detectBounds".log()
           return false
         }
 

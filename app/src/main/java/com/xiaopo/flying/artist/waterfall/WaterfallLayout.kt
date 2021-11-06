@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.widget.ScrollView
 import com.xiaopo.flying.artist.R
 import com.xiaopo.flying.artist.base.clamp
-import com.xiaopo.flying.artist.base.dp
+import com.xiaopo.flying.artist.base.dpInt
 
 /**
  * @author wupanjie
@@ -17,19 +17,19 @@ class WaterfallLayout @JvmOverloads constructor(context: Context,
                                                 defStyle: Int = 0)
   : CardView(context, attr, defStyle) {
 
-  var initialElevation: Int = 0.dp
+  var initialElevation: Int = 0.dpInt
     set(value) {
       field = value
       withTargetScroll()
     }
 
-  var finalElevation: Int = 6.dp
+  var finalElevation: Int = 6.dpInt
     set(value) {
       field = value
       withTargetScroll()
     }
 
-  var scrollFinalElevation: Int = 300.dp
+  var scrollFinalElevation: Int = 300.dpInt
     set(value) {
       field = value
       withTargetScroll()
@@ -44,9 +44,9 @@ class WaterfallLayout @JvmOverloads constructor(context: Context,
     radius = 0f
     attr?.let {
       val typedArray = context.obtainStyledAttributes(attr, R.styleable.WaterfallLayout)
-      initialElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallLayout_initial_elevation, 0.dp)
-      finalElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallLayout_final_elevation, 6.dp)
-      scrollFinalElevation = typedArray.getInteger(R.styleable.WaterfallLayout_final_elevation, 300.dp)
+      initialElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallLayout_initial_elevation, 0.dpInt)
+      finalElevation = typedArray.getDimensionPixelSize(R.styleable.WaterfallLayout_final_elevation, 6.dpInt)
+      scrollFinalElevation = typedArray.getInteger(R.styleable.WaterfallLayout_final_elevation, 300.dpInt)
       typedArray.recycle()
     }
   }

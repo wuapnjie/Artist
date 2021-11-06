@@ -5,6 +5,6 @@ import android.util.Log
 /**
  * @author wupanjie
  */
-fun Any.logd(message: String): Unit {
-  Log.d(this.javaClass.simpleName, message)
+fun Any.log(tag: String = "Artist") {
+    Log.d(tag, toString())
 }

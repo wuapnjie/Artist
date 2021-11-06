@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.ImageView
 import com.xiaopo.flying.artist.base.GestureKiller
-import com.xiaopo.flying.artist.base.logd
+import com.xiaopo.flying.artist.base.log
 
 /**
  * @author wupanjie
@@ -27,39 +27,38 @@ class InteractionImageView @JvmOverloads constructor(context: Context,
   private val gestureKiller = GestureKiller(context)
 
   init {
-    logd("scale type : $assignedScaleType")
+    "scale type : $assignedScaleType".log()
     // 自己控制Matrix
     scaleType = ScaleType.MATRIX
 
     gestureKiller.onNotTouchedListener = { x, y ->
-      logd("Not Touched")
+      "Not Touched".log()
     }
 
     gestureKiller.onLongPressListener = { x, y ->
-      logd("Long Touched -> ($x,$y)")
+      "Long Touched -> ($x,$y)".log()
     }
 
     gestureKiller.onSingleTapListener = { x, y ->
-      logd("Single Tap -> ($x,$y)")
+      "Single Tap -> ($x,$y)".log()
     }
 
     gestureKiller.onDoubleTapListener = { x, y ->
-      logd("Double Tap -> ($x,$y)")
+      "Double Tap -> ($x,$y)".log()
     }
 
     gestureKiller.onDragListener = { x, y ->
-      logd("Drag -> ($x,$y)")
+      "Drag -> ($x,$y)".log()
       controlMatrix.postTranslate(x, y)
       changeMatrix()
     }
 
     gestureKiller.onReleaseListener = { x, y, gesture ->
-      logd("Release -> ($x,$y), gesture -> $gesture")
-
+      "Release -> ($x,$y), gesture -> $gesture".log()
     }
 
     gestureKiller.onZoomAndRotateListener = { midX, midY, deltaZoom, deltaAngle ->
-      logd("Zoom And Rotation -> ($midX,$midY), deltaZoom -> $deltaZoom, delta Angle -> $deltaAngle")
+      "Zoom And Rotation -> ($midX,$midY), deltaZoom -> $deltaZoom, delta Angle -> $deltaAngle".log()
       controlMatrix.postScale(deltaZoom, deltaZoom, currentBounds.centerX(), currentBounds.centerY())
       controlMatrix.postRotate(deltaAngle, currentBounds.centerX(), currentBounds.centerY())
       changeMatrix()

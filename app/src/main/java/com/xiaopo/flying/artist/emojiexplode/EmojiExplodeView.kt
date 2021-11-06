@@ -8,8 +8,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import com.xiaopo.flying.animatekit.quickAnimate
-import com.xiaopo.flying.artist.base.dp
-import com.xiaopo.flying.artist.base.logd
+import com.xiaopo.flying.artist.base.dpInt
+import com.xiaopo.flying.artist.base.log
 import com.xiaopo.flying.artist.base.toRadian
 import java.util.*
 import kotlin.math.cos
@@ -58,7 +58,7 @@ class EmojiExplodeView @JvmOverloads constructor(context: Context,
     currentBullets.forEach { bullet ->
       bullet.center.set(bounds.centerX().toFloat(), bounds.centerY().toFloat())
 
-      bullet.emitSpeed = 56.dp + random.nextFloat() * 32.dp
+      bullet.emitSpeed = 56.dpInt + random.nextFloat() * 32.dpInt
       bullet.emitAngle = -20 + random.nextFloat() * 160
       bullet.emit()
     }
@@ -95,7 +95,7 @@ class EmojiExplodeView @JvmOverloads constructor(context: Context,
         targets = arrayListOf(this@EmojiExplodeView)
         floatValues(0f, 5f) { _, value ->
           // 无阻力的以一定角度初速度发射的位置变化
-          logd("(${emitSpeed * cos(emitAngle.toRadian()) * value},${(emitSpeed * sin(emitAngle.toRadian()) * value - 9.8f * value * value / 2)})")
+          "(${emitSpeed * cos(emitAngle.toRadian()) * value},${(emitSpeed * sin(emitAngle.toRadian()) * value - 9.8f * value * value / 2)})".log()
           center.x = emitCenter.x + emitSpeed * cos(emitAngle.toRadian()) * value
           // because left-top is (0,0)
           center.y = emitCenter.y - (emitSpeed * sin(emitAngle.toRadian()) * value - 9.8f * value * value / 2)

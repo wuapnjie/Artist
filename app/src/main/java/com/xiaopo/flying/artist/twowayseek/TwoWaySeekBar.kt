@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.xiaopo.flying.artist.R
 import com.xiaopo.flying.artist.base.clamp
-import com.xiaopo.flying.artist.base.dp
+import com.xiaopo.flying.artist.base.dpInt
 import com.xiaopo.flying.artist.base.modifyAlpha
 import kotlin.math.sqrt
 
@@ -71,8 +71,8 @@ class TwoWaySeekBar @JvmOverloads constructor(context: Context,
     attr?.let {
       val typedArray = context.obtainStyledAttributes(attr, R.styleable.TwoWaySeekBar)
 
-      val lineWidth = typedArray.getDimensionPixelSize(R.styleable.TwoWaySeekBar_lineWidth, 3.dp).toFloat()
-      val handleRadius = typedArray.getDimensionPixelSize(R.styleable.TwoWaySeekBar_handleRadius, 8.dp).toFloat()
+      val lineWidth = typedArray.getDimensionPixelSize(R.styleable.TwoWaySeekBar_lineWidth, 3.dpInt).toFloat()
+      val handleRadius = typedArray.getDimensionPixelSize(R.styleable.TwoWaySeekBar_handleRadius, 8.dpInt).toFloat()
       minValue = typedArray.getFloat(R.styleable.TwoWaySeekBar_maxValue, -10f)
       maxValue = typedArray.getFloat(R.styleable.TwoWaySeekBar_minValue, 10f)
       initialValue = typedArray.getFloat(R.styleable.TwoWaySeekBar_initialValue, (minValue + maxValue) / 2)
@@ -108,7 +108,7 @@ class TwoWaySeekBar @JvmOverloads constructor(context: Context,
 
     val heightSize = View.MeasureSpec.getSize(heightMeasureSpec)
 
-    val suggestWidth = 300.dp + paddingLeft + paddingRight
+    val suggestWidth = 300.dpInt + paddingLeft + paddingRight
     val suggestHeight = ((handle.radius + handle.extraRadius) * 4).toInt() + paddingTop + paddingBottom
 
     if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT && layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
@@ -240,7 +240,7 @@ class TwoWaySeekBar @JvmOverloads constructor(context: Context,
       val end: PointF = PointF(0f, 0f)
   ) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    val strokeWidth = 3.dp.toFloat()
+    val strokeWidth = 3.dpInt.toFloat()
 
     init {
       paint.strokeCap = Paint.Cap.ROUND
@@ -255,7 +255,7 @@ class TwoWaySeekBar @JvmOverloads constructor(context: Context,
   }
 
   private class Handle(
-      var radius: Float = 7.dp.toFloat(),
+      var radius: Float = 7.dpInt.toFloat(),
       var extraRadius: Float = radius,
       val center: PointF = PointF(0f, 0f)
   ) {

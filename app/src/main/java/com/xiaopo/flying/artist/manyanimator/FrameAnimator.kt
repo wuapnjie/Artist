@@ -14,6 +14,7 @@ abstract class FrameAnimator @JvmOverloads constructor(
         private val name: String,
         private val totalFrames: Int,
         private val cycleDuration: Long,
+        private val startDelay: Long,
         private val repeatable: Boolean,
         private val isForward: Boolean = true
 ) {
@@ -61,6 +62,10 @@ abstract class FrameAnimator @JvmOverloads constructor(
         var newFrame = (cycleTime * totalFrames / cycleDuration).toLong()
 
         if (repeatable) {
+            if (newFrame != currentFrame.toLong() && newFrame >= totalFrames) {
+                onAnimateRepeat()
+            }
+
             newFrame %= totalFrames.toLong()
         }
 
@@ -111,6 +116,14 @@ abstract class FrameAnimator @JvmOverloads constructor(
 
     }
 
+    protected open fun onAnimateRepeat() {
+
+    }
+
+    protected open fun onAnimateCancel() {
+
+    }
+
     fun start() {
         resume()
     }
@@ -147,7 +160,8 @@ abstract class FrameAnimator @JvmOverloads constructor(
                 }
             }
 
-            Choreographer.getInstance().postFrameCallback(ticker)
+            val delay = if (initialStep) startDelay else 0L
+            Choreographer.getInstance().postFrameCallbackDelayed(ticker, delay)
         }
     }
 
@@ -169,8 +183,13 @@ abstract class FrameAnimator @JvmOverloads constructor(
     }
 
     fun cancel() {
+        val actualCancel = isRunning
         pause()
         reset()
+        if (actualCancel) {
+            onAnimateCancel()
+            onAnimateEnd()
+        }
     }
 
     override fun toString(): String {
