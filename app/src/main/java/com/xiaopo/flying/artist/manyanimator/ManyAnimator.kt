@@ -7,6 +7,8 @@ import android.graphics.PathMeasure
 import android.os.Build
 import android.util.Property
 import android.view.View
+import com.xiaopo.flying.artist.manyanimator.frame.FrameAnimatorSet
+import com.xiaopo.flying.artist.manyanimator.frame.ValueFrameAnimator
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -14,20 +16,24 @@ import java.util.concurrent.ConcurrentHashMap
  */
 internal typealias Listener = () -> Unit
 
-fun quickAnimate(init: ManyAnimator.() -> Unit) = ManyAnimator.Controller(ManyAnimator().apply(init))
+fun quickAnimate(useFrameAnimator: Boolean, init: ManyAnimator.() -> Unit) =
+    ManyAnimator.Controller(ManyAnimator(useFrameAnimator).apply(init))
 
 fun ManyAnimator.Controller.cancelAndStart() {
     cancel()
     start()
 }
 
-
-class ManyAnimator {
+class ManyAnimator(private val useFrameAnimator: Boolean = false) {
 
     var duration: Long = -1L
     var interpolator: TimeInterpolator? = null
 
-    private var currentAnimatorSet: AnimatorSet = AnimatorSet()
+    private var currentAnimatorSet: AnAnimatorSet = if (useFrameAnimator) {
+        FrameAnimatorSet()
+    } else {
+        AnAnimatorSet.wrap(AnimatorSet())
+    }
     private var plays = arrayListOf<Animator>()
 
     var onStart: Listener? = null
@@ -114,13 +120,19 @@ class ManyAnimator {
     }
 
     fun delay(time: Long) {
-        val animator = ValueAnimator.ofFloat(0f, 1f)
+        val animator = if (useFrameAnimator)
+            ValueFrameAnimator.ofFloat(0f, 1f).apply {
+                name = "DelayFrameAnimator"
+            }
+        else
+            ValueAnimator.ofFloat(0f, 1f)
+
         animator.duration = time
         plays.add(animator)
     }
 
     fun play(anim: AnAnimator.() -> Unit) {
-        val animator = AnAnimator().apply(anim).createAnimator()
+        val animator = AnAnimator(useFrameAnimator).apply(anim).createAnimator()
         if (duration >= 0) {
             animator.duration = duration
         }
@@ -131,12 +143,12 @@ class ManyAnimator {
     }
 
     fun together(init: ManyAnimator.() -> Unit) {
-        val animator = ManyAnimator().apply(init).createTogether()
+        val animator = ManyAnimator(useFrameAnimator).apply(init).createTogether()
         plays.add(animator)
     }
 
     fun sequence(init: ManyAnimator.() -> Unit) {
-        val animator = ManyAnimator().apply(init).createSequence()
+        val animator = ManyAnimator(useFrameAnimator).apply(init).createSequence()
         plays.add(animator)
     }
 
@@ -176,9 +188,13 @@ class ManyAnimator {
 /**
  * to let play together
  */
-class AnAnimator {
+class AnAnimator(private val useFrameAnimator: Boolean) {
 
-    private val animatorSet = AnimatorSet()
+    private val animatorSet: AnAnimatorSet = if (useFrameAnimator) {
+        FrameAnimatorSet()
+    } else {
+        AnAnimatorSet.wrap(AnimatorSet())
+    }
     private val animators = arrayListOf<Animator>()
 
     var targets: List<View> = arrayListOf()
@@ -250,35 +266,52 @@ class AnAnimator {
         property(View.ROTATION, *values, onUpdate = onUpdate)
     }
 
-    fun pivotX(vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
-        property("pivotX", *values, onUpdate = onUpdate)
-    }
+//    fun pivotX(vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
+//        property("pivotX", *values, onUpdate = onUpdate)
+//    }
+//
+//    fun pivotY(vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
+//        property("pivotY", *values, onUpdate = onUpdate)
+//    }
+//
+//    fun pivot(vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
+//        pivotX(*values, onUpdate = onUpdate)
+//        pivotY(*values, onUpdate = onUpdate)
+//    }
 
-    fun pivotY(vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
-        property("pivotY", *values, onUpdate = onUpdate)
-    }
+//    fun property(
+//        propertyName: String,
+//        vararg values: Float,
+//        onUpdate: ((value: Any) -> Unit)? = null
+//    ) {
+//        targets.forEach {
+//            val valueAnimator = ObjectAnimator.ofFloat(it, propertyName, *values)
+//            valueAnimator.repeatCount = repeatCount
+//            if (onUpdate != null) {
+//                valueAnimator.addUpdateListener { animator ->
+//                    onUpdate.invoke(animator.animatedValue)
+//                }
+//            }
+//            animators.add(valueAnimator)
+//        }
+//    }
 
-    fun pivot(vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
-        pivotX(*values, onUpdate = onUpdate)
-        pivotY(*values, onUpdate = onUpdate)
-    }
-
-    fun property(propertyName: String, vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
-        targets.forEach {
-            val valueAnimator = ObjectAnimator.ofFloat(it, propertyName, *values)
-            valueAnimator.repeatCount = repeatCount
-            if (onUpdate != null) {
-                valueAnimator.addUpdateListener { animator ->
-                    onUpdate.invoke(animator.animatedValue)
+    fun property(
+        property: Property<View, Float>,
+        vararg values: Float,
+        onUpdate: ((value: Any) -> Unit)? = null
+    ) {
+        targets.forEach { target ->
+            val valueAnimator = if (useFrameAnimator) {
+                ValueFrameAnimator.ofFloat(*values).apply {
+                    addUpdateListener { animator ->
+                        property.set(target, animator.animatedValue as Float)
+                    }
+                    name = "PropertyFrameAnimator"
                 }
+            } else {
+                ObjectAnimator.ofFloat(target, property, *values)
             }
-            animators.add(valueAnimator)
-        }
-    }
-
-    fun property(property: Property<View, Float>, vararg values: Float, onUpdate: ((value: Any) -> Unit)? = null) {
-        targets.forEach {
-            val valueAnimator = ObjectAnimator.ofFloat(it, property, *values)
             valueAnimator.repeatCount = repeatCount
             if (onUpdate != null) {
                 valueAnimator.addUpdateListener { animator ->
@@ -312,10 +345,19 @@ class AnAnimator {
         }
     }
 
-    fun floatValues(vararg values: Float, evaluator: TypeEvaluator<*>? = null, onUpdate: (target: View?, value:
-    Float) -> Unit) {
+    fun floatValues(
+        vararg values: Float, evaluator: TypeEvaluator<*>? = null, onUpdate: (
+            target: View?, value:
+            Float
+        ) -> Unit
+    ) {
+        val valueAnimator = if (useFrameAnimator)
+            ValueFrameAnimator.ofFloat(*values).apply {
+                name = "FloatFrameAnimator"
+            }
+        else
+            ValueAnimator.ofFloat(*values)
         if (targets.isEmpty()) {
-            val valueAnimator = ValueAnimator.ofFloat(*values)
             valueAnimator.addUpdateListener { anim ->
                 onUpdate.invoke(null, anim.animatedValue as Float)
             }
@@ -323,7 +365,6 @@ class AnAnimator {
             animators.add(valueAnimator)
         } else {
             targets.forEach { target ->
-                val valueAnimator = ValueAnimator.ofFloat(*values)
                 valueAnimator.addUpdateListener { anim ->
                     onUpdate.invoke(target, anim.animatedValue as Float)
                 }
@@ -333,10 +374,19 @@ class AnAnimator {
         }
     }
 
-    fun intValues(vararg values: Int, evaluator: TypeEvaluator<*>? = null, onUpdate: (target: View?, value: Int) ->
-    Unit) {
+    fun intValues(
+        vararg values: Int,
+        evaluator: TypeEvaluator<*>? = null,
+        onUpdate: (target: View?, value: Int) ->
+        Unit
+    ) {
+        val valueAnimator = if (useFrameAnimator)
+            ValueFrameAnimator.ofInt(*values).apply {
+                name = "IntFrameAnimator"
+            }
+        else
+            ValueAnimator.ofInt(*values)
         if (targets.isEmpty()) {
-            val valueAnimator = ValueAnimator.ofInt(*values)
             valueAnimator.addUpdateListener { anim ->
                 onUpdate.invoke(null, anim.animatedValue as Int)
             }
@@ -344,7 +394,6 @@ class AnAnimator {
             animators.add(valueAnimator)
         } else {
             targets.forEach { target ->
-                val valueAnimator = ValueAnimator.ofInt(*values)
                 valueAnimator.addUpdateListener { anim ->
                     onUpdate.invoke(target, anim.animatedValue as Int)
                 }

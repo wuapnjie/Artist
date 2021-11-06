@@ -1,4 +1,4 @@
-package com.xiaopo.flying.artist.manyanimator
+package com.xiaopo.flying.artist.manyanimator.frame
 
 import android.os.Build
 import androidx.annotation.MainThread
@@ -32,6 +32,10 @@ abstract class FrameAnimator @JvmOverloads constructor(
 
     val isRunning: Boolean
         get() = ticker != null
+
+    @Volatile
+    var isPaused: Boolean = false
+        private set
 
     init {
         reset()
@@ -125,16 +129,31 @@ abstract class FrameAnimator @JvmOverloads constructor(
     }
 
     fun start() {
-        resume()
+        startInternal()
     }
 
     fun pause() {
+        if (!isRunning) {
+            return
+        }
         startDeltaTime = System.currentTimeMillis() - startTime
         initialStep = true
+        isPaused = true
         stopTicker()
     }
 
     fun resume() {
+        if (!isPaused) {
+            return
+        }
+
+        isPaused = false
+
+        startInternal()
+    }
+
+    private fun startInternal() {
+
         if (isDisposed) {
             stopTicker()
             return
@@ -180,6 +199,7 @@ abstract class FrameAnimator @JvmOverloads constructor(
         currentFrame = 0
         startDeltaTime = 0
         initialStep = true
+        isPaused = false
     }
 
     fun cancel() {
