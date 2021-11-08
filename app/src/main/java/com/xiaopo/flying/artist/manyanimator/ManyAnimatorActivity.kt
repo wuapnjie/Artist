@@ -2,6 +2,7 @@ package com.xiaopo.flying.artist.manyanimator
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -57,6 +58,7 @@ class ManyAnimatorActivity : AppCompatActivity() {
                 play {
                     targets = listOf(ivColor)
                     duration = 500L
+                    repeatCount = 1
                     alpha(1f, 0f, 1f)
                 }
             }
@@ -103,6 +105,7 @@ class ManyAnimatorActivity : AppCompatActivity() {
             }
         })
 
+        frameAnimator.repeatCount = ValueAnimator.INFINITE
         frameAnimator.start()
     }
 }

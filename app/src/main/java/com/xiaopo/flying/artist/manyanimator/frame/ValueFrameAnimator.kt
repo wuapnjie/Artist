@@ -22,13 +22,16 @@ class ValueFrameAnimator private constructor(
 ) : ValueAnimator() {
 
     companion object {
+        const val DURATION_INFINITE = -1L
 
         var frameCountPerSecond = 60
 
+        @JvmStatic
         fun ofFloat(vararg values: Float): ValueFrameAnimator {
             return ValueFrameAnimator(values)
         }
 
+        @JvmStatic
         fun ofInt(vararg values: Int): ValueFrameAnimator {
             val floatValue = FloatArray(values.size) { i -> values[i].toFloat() }
             return ValueFrameAnimator(floatValue) { it.toInt() }
@@ -36,8 +39,6 @@ class ValueFrameAnimator private constructor(
 
     }
 
-    //    private var start: Float = values.first()
-    //    private var end: Float = values.last()
     private val animateFractionStages: ArrayList<AnimateFractionStage> = ArrayList(values.size)
 
     init {
@@ -64,8 +65,7 @@ class ValueFrameAnimator private constructor(
     private val fraction: Float get() = fractionFrameAnimator?.animateFraction ?: 0f
     private var actualValue: Any? = null
 
-    var repeat: Boolean = false
-    var reverse: Boolean = false
+    private var reverse: Boolean = false
 
     private var timeInterpolator: TimeInterpolator? = null
     private var evaluator: TypeEvaluator<Any>? = null
@@ -190,14 +190,6 @@ class ValueFrameAnimator private constructor(
         return super.getAnimatedValue(propertyName)
     }
 
-    override fun setRepeatMode(value: Int) {
-        // TODO 待实现
-    }
-
-    override fun setRepeatCount(value: Int) {
-        // TODO 待实现
-    }
-
     override fun reverse() {
         // TODO 待实现
     }
@@ -210,12 +202,15 @@ class ValueFrameAnimator private constructor(
     private fun initAnimator() {
         val totalFrames = ((duration.toFloat() / 1000) * frameCountPerSecond).toInt()
 
+        val repeatCount = repeatCount
+        val repeat = repeatCount > 0 || repeatCount == ValueAnimator.INFINITE
+
         fractionFrameAnimator = FractionFrameAnimator(
             name,
             totalFrames,
             duration,
             repeat,
-            reverse,
+            repeatCount,
             startDelay,
             onAnimateFractionUpdatedListener = { fraction ->
                 val fractionStage = animateFractionStages.first { fraction in it.fractionRange }
@@ -240,14 +235,14 @@ class ValueFrameAnimator private constructor(
         totalFrames: Int,
         duration: Long,
         repeat: Boolean = false,
-        reverse: Boolean = false,
+        repeatCount: Int = 0,
         startDelay: Long = 0L,
         private val onAnimateFractionUpdatedListener: OnAnimateFractionUpdatedListener,
         private val onAnimateStartListener: OnAnimateStartListener,
         private val onAnimateEndListener: OnAnimateEndListener,
         private val onAnimateRepeatListener: OnAnimateRepeatListener,
         private val onAnimateCancelListener: OnAnimateCancelListener
-    ) : FrameAnimator(name, totalFrames, duration, startDelay, repeat) {
+    ) : FrameAnimator(name, totalFrames, duration, startDelay, repeat, repeatCount) {
 
         var animateFraction: Float = 0f
 

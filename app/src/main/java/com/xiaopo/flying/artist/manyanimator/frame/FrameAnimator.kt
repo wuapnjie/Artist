@@ -11,12 +11,13 @@ import android.view.Choreographer
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 @MainThread
 abstract class FrameAnimator @JvmOverloads constructor(
-        private val name: String,
-        private val totalFrames: Int,
-        private val cycleDuration: Long,
-        private val startDelay: Long,
-        private val repeatable: Boolean,
-        private val isForward: Boolean = true
+    private val name: String,
+    private val totalFrames: Int,
+    private val cycleDuration: Long,
+    private val startDelay: Long,
+    private val repeatable: Boolean,
+    private val repeatCount: Int,
+    private val isForward: Boolean = true
 ) {
 
     private var ticker: Choreographer.FrameCallback? = null
@@ -25,6 +26,7 @@ abstract class FrameAnimator @JvmOverloads constructor(
     private var startTime: Long = 0
     private var startDeltaTime: Long = 0
     private var initialStep: Boolean = false
+    private var currentRepeatCount = 0
 
     @Volatile
     var isDisposed: Boolean = false
@@ -50,7 +52,8 @@ abstract class FrameAnimator @JvmOverloads constructor(
 
         if (initialStep) {
             initialStep = false
-            startTime = System.currentTimeMillis() - startDeltaTime // keep animation state on suspend
+            startTime =
+                System.currentTimeMillis() - startDeltaTime // keep animation state on suspend
 
             if (!isDisposed) {
                 this.onAnimateStart()
@@ -66,8 +69,17 @@ abstract class FrameAnimator @JvmOverloads constructor(
         var newFrame = (cycleTime * totalFrames / cycleDuration).toLong()
 
         if (repeatable) {
-            if (newFrame != currentFrame.toLong() && newFrame >= totalFrames) {
+            if (newFrame != currentFrame.toLong() &&
+                newFrame >= totalFrames + currentRepeatCount * totalFrames
+            ) {
                 onAnimateRepeat()
+
+                if (currentRepeatCount >= repeatCount && !isRepeatInfinite()) {
+                    animationDone()
+                    return
+                }
+
+                currentRepeatCount++
             }
 
             newFrame %= totalFrames.toLong()
@@ -85,15 +97,17 @@ abstract class FrameAnimator @JvmOverloads constructor(
         paint()
     }
 
+    private fun isRepeatInfinite() = repeatCount == -1
+
     private fun nextTick() {
         ticker?.let { Choreographer.getInstance().postFrameCallback(it) }
     }
 
     private fun paint() {
         onValueUpdated(
-                if (isForward) currentFrame else totalFrames - currentFrame - 1,
-                totalFrames,
-                cycleDuration
+            if (isForward) currentFrame else totalFrames - currentFrame - 1,
+            totalFrames,
+            cycleDuration
         )
     }
 
@@ -200,6 +214,7 @@ abstract class FrameAnimator @JvmOverloads constructor(
         startDeltaTime = 0
         initialStep = true
         isPaused = false
+        currentRepeatCount = 0
     }
 
     fun cancel() {
@@ -215,6 +230,6 @@ abstract class FrameAnimator @JvmOverloads constructor(
     override fun toString(): String {
         val future = ticker
         return "FrameAnimator '" + name + "' @" + System.identityHashCode(this) +
-                if (future == null) " (stopped)" else " (running $currentFrame/$totalFrames frame)"
+            if (future == null) " (stopped)" else " (running $currentFrame/$totalFrames frame)"
     }
 }

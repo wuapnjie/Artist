@@ -47,19 +47,14 @@ internal class FrameAnimatorSet : AnAnimatorSet() {
 
         when (playMode) {
             PlayMode.Together -> {
-                animators.maxByOrNull {
-                    if (it is FrameAnimatorSet) {
-                        it.totalDuration()
-                    } else {
-                        it.duration
-                    }
-                }?.addListener(object : AnimatorListenerAdapter() {
+                animators.maxByOrNull { getAnimatorDuration(it) }
+                    ?.addListener(object : AnimatorListenerAdapter() {
 
-                    override fun onAnimationEnd(animation: Animator?) {
-                        listeners?.forEach { it.onAnimationEnd(this@FrameAnimatorSet) }
-                    }
+                        override fun onAnimationEnd(animation: Animator?) {
+                            listeners?.forEach { it.onAnimationEnd(this@FrameAnimatorSet) }
+                        }
 
-                })
+                    })
 
                 animators.forEach { it.start() }
             }
@@ -84,6 +79,16 @@ internal class FrameAnimatorSet : AnAnimatorSet() {
 
                 animators.firstOrNull()?.start()
             }
+        }
+    }
+
+    private fun getAnimatorDuration(it: Animator) = if (it is FrameAnimatorSet) {
+        it.totalDuration()
+    } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            it.totalDuration
+        } else {
+            it.duration
         }
     }
 
@@ -127,19 +132,15 @@ internal class FrameAnimatorSet : AnAnimatorSet() {
 
     private fun totalDuration(): Long {
         return when (playMode) {
-            PlayMode.Together -> animators.maxOf {
-                if (it is FrameAnimatorSet) {
-                    it.totalDuration()
-                } else {
-                    it.duration
-                }
+            PlayMode.Together -> if (animators.any { getAnimatorDuration(it) == ValueFrameAnimator.DURATION_INFINITE }) {
+                ValueFrameAnimator.DURATION_INFINITE
+            } else {
+                animators.maxOf { getAnimatorDuration(it) }
             }
-            PlayMode.Sequentially -> animators.sumOf {
-                if (it is FrameAnimatorSet) {
-                    it.totalDuration()
-                } else {
-                    it.duration
-                }
+            PlayMode.Sequentially -> if (animators.any { getAnimatorDuration(it) == ValueFrameAnimator.DURATION_INFINITE }) {
+                ValueFrameAnimator.DURATION_INFINITE
+            } else {
+                animators.sumOf { getAnimatorDuration(it) }
             }
         }
     }
